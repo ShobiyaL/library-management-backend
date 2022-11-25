@@ -11,12 +11,17 @@ const { connectDb } = require("./database")
 const { UserModel } = require("./models/user")
 const port = 5000;
 
+const cors = require('cors');
+
 const app = express()
 
 app.use(morgan("dev"))
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: false }))
+
+
+app.use(cors());
 
 app.use(
   sessions({
@@ -45,9 +50,9 @@ connectDb()
     if (admin == null) {
       await UserModel.create({ username: "admin", password: "admin", role: "admin" })
     }
-    const guest = await UserModel.findOne({ username: "guest" })
-    if (guest == null) {
-      await UserModel.create({ username: "guest", password: "guest", role: "guest" })
+    const user = await UserModel.findOne({ username: "user" })
+    if (user == null) {
+      await UserModel.create({ username: "user", password: "user", role: "user" })
     }
     console.log("Established connection to the database")
   })
